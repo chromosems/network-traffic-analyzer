@@ -1,0 +1,320 @@
+{
+  "report_generated": "2026-04-29T07:11:27.710151",
+  "pcap_file": "/tmp/netsentinel_demo.pcap",
+  "overall_risk_score": 9.0,
+  "risk_label": "CRITICAL",
+  "stats": {
+    "total_packets": 3330,
+    "capture_start": "2026-04-29T06:11:27",
+    "capture_end": "2026-04-29T06:44:47",
+    "duration_sec": 2000.0,
+    "unique_hosts": 17,
+    "protocol_dist": {
+      "TCP": 3243,
+      "UDP": 85,
+      "ARP": 2
+    }
+  },
+  "category_summary": {
+    "Malicious Activity": 6,
+    "Reconnaissance": 1,
+    "Network Attack": 1,
+    "Credential Exposure": 11,
+    "Data Exfiltration": 2,
+    "C2 Communication": 3,
+    "Brute Force": 1
+  },
+  "findings": [
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 4444 Traffic \u2014 10.0.0.5 \u2192 192.168.1.50",
+      "description": "Traffic on port 4444 (Metasploit default listener) detected between 10.0.0.5 and 192.168.1.50.",
+      "risk_score": 9.0,
+      "evidence": [
+        "Src: 10.0.0.5:4444",
+        "Dst: 192.168.1.50:4444",
+        "Classification: Metasploit default listener"
+      ],
+      "recommendation": "Investigate port 4444 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    },
+    {
+      "category": "Reconnaissance",
+      "title": "Port Scan Detected \u2014 192.168.1.20",
+      "description": "192.168.1.20 probed 129 distinct destination ports, consistent with automated scanning.",
+      "risk_score": 9.0,
+      "evidence": [
+        "Distinct ports probed: 129",
+        "Sample: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
+      ],
+      "recommendation": "Block source IP at perimeter. Enable IPS port-scan signatures. Investigate host for compromise."
+    },
+    {
+      "category": "Network Attack",
+      "title": "ARP Spoofing / Cache Poisoning \u2014 192.168.1.1",
+      "description": "IP 192.168.1.1 appeared with 2 different MAC addresses in ARP replies.",
+      "risk_score": 9.0,
+      "evidence": [
+        "IP: 192.168.1.1",
+        "MACs observed: ['aa:bb:cc:dd:ee:01', 'ff:ee:dd:cc:bb:02']"
+      ],
+      "recommendation": "Enable Dynamic ARP Inspection (DAI). Add static ARP entries for critical hosts. Investigate for active MITM attack."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Password in HTTP POST \u2014 192.168.1.80 \u2192 10.0.0.1",
+      "description": "HTTP payload from 192.168.1.80 contains a password field sent in cleartext.",
+      "risk_score": 8.5,
+      "evidence": [
+        "Src: 192.168.1.80",
+        "Dst: 10.0.0.1:80",
+        "Keyword match: password/passwd/pwd"
+      ],
+      "recommendation": "Enforce HTTPS with HSTS. Audit all web forms for cleartext submission."
+    },
+    {
+      "category": "Data Exfiltration",
+      "title": "DNS Tunneling Suspected \u2014 192.168.1.40",
+      "description": "192.168.1.40 issued 85 DNS queries; 85 had names >50 chars (100%), indicating possible DNS tunneling.",
+      "risk_score": 8.5,
+      "evidence": [
+        "Total queries: 85",
+        "Long-name queries: 85",
+        "Ratio: 100.0%",
+        "Sample: aaabbb0000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.tunnel.evil.com"
+      ],
+      "recommendation": "Deploy DNS monitoring/filtering. Block excessive or long-name queries. Investigate host for dns2tcp, iodine, or dnscat tools."
+    },
+    {
+      "category": "C2 Communication",
+      "title": "Beaconing Detected \u2014 192.168.1.10->93.184.216.34:443",
+      "description": "Regular 0.1s \u00b1 0.27s intervals over 40 packets \u2014 consistent with automated C2 heartbeat.",
+      "risk_score": 7.5,
+      "evidence": [
+        "Connection: 192.168.1.10->93.184.216.34:443",
+        "Packets: 40",
+        "Avg interval: 0.08s",
+        "Std deviation: 0.2665s"
+      ],
+      "recommendation": "Isolate beaconing host immediately. Perform memory forensics. Block C2 destination at firewall/proxy."
+    },
+    {
+      "category": "C2 Communication",
+      "title": "Beaconing Detected \u2014 192.168.1.60->185.220.101.1:8080",
+      "description": "Regular 60.0s \u00b1 0.00s intervals over 20 packets \u2014 consistent with automated C2 heartbeat.",
+      "risk_score": 7.5,
+      "evidence": [
+        "Connection: 192.168.1.60->185.220.101.1:8080",
+        "Packets: 20",
+        "Avg interval: 60.00s",
+        "Std deviation: 0.0000s"
+      ],
+      "recommendation": "Isolate beaconing host immediately. Perform memory forensics. Block C2 destination at firewall/proxy."
+    },
+    {
+      "category": "C2 Communication",
+      "title": "Beaconing Detected \u2014 10.0.0.99->192.168.1.10:22",
+      "description": "Regular 0.5s \u00b1 0.50s intervals over 45 packets \u2014 consistent with automated C2 heartbeat.",
+      "risk_score": 7.5,
+      "evidence": [
+        "Connection: 10.0.0.99->192.168.1.10:22",
+        "Packets: 45",
+        "Avg interval: 0.50s",
+        "Std deviation: 0.5000s"
+      ],
+      "recommendation": "Isolate beaconing host immediately. Perform memory forensics. Block C2 destination at firewall/proxy."
+    },
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 23 Traffic \u2014 192.168.1.20 \u2192 192.168.1.1",
+      "description": "Traffic on port 23 (Telnet \u2013 cleartext) detected between 192.168.1.20 and 192.168.1.1.",
+      "risk_score": 7.0,
+      "evidence": [
+        "Src: 192.168.1.20:54321",
+        "Dst: 192.168.1.1:23",
+        "Classification: Telnet \u2013 cleartext"
+      ],
+      "recommendation": "Investigate port 23 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    },
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 23 Traffic \u2014 192.168.1.30 \u2192 192.168.1.1",
+      "description": "Traffic on port 23 (Telnet \u2013 cleartext) detected between 192.168.1.30 and 192.168.1.1.",
+      "risk_score": 7.0,
+      "evidence": [
+        "Src: 192.168.1.30:55000",
+        "Dst: 192.168.1.1:23",
+        "Classification: Telnet \u2013 cleartext"
+      ],
+      "recommendation": "Investigate port 23 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: FTP from 192.168.1.20",
+      "description": "FTP (port 21) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: FTP (port 21)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace FTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: Telnet from 192.168.1.20",
+      "description": "Telnet (port 23) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: Telnet (port 23)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace Telnet with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: HTTP from 192.168.1.70",
+      "description": "HTTP (port 80) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: HTTP (port 80)",
+        "Source: 192.168.1.70"
+      ],
+      "recommendation": "Replace HTTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: FTP from 192.168.1.30",
+      "description": "FTP (port 21) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: FTP (port 21)",
+        "Source: 192.168.1.30"
+      ],
+      "recommendation": "Replace FTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: HTTP from 192.168.1.20",
+      "description": "HTTP (port 80) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: HTTP (port 80)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace HTTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: SMTP from 192.168.1.20",
+      "description": "SMTP (port 25) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: SMTP (port 25)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace SMTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: TFTP from 192.168.1.20",
+      "description": "TFTP (port 69) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: TFTP (port 69)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace TFTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: HTTP from 192.168.1.80",
+      "description": "HTTP (port 80) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: HTTP (port 80)",
+        "Source: 192.168.1.80"
+      ],
+      "recommendation": "Replace HTTP with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: POP3 from 192.168.1.20",
+      "description": "POP3 (port 110) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: POP3 (port 110)",
+        "Source: 192.168.1.20"
+      ],
+      "recommendation": "Replace POP3 with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Credential Exposure",
+      "title": "Cleartext Protocol: Telnet from 192.168.1.30",
+      "description": "Telnet (port 23) is unencrypted. Credentials transmitted are visible to anyone on the path.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Protocol: Telnet (port 23)",
+        "Source: 192.168.1.30"
+      ],
+      "recommendation": "Replace Telnet with its encrypted equivalent (SFTP/SSH/HTTPS/IMAPS/LDAPS). Block plaintext variant at firewall."
+    },
+    {
+      "category": "Brute Force",
+      "title": "SSH Brute Force \u2014 10.0.0.99->192.168.1.10:22",
+      "description": "45 connection attempts to SSH (port 22) from 10.0.0.99.",
+      "risk_score": 6.5,
+      "evidence": [
+        "Source: 10.0.0.99",
+        "Service: SSH (port 22)",
+        "Attempts: 45"
+      ],
+      "recommendation": "Block source IP. Enable account lockout on SSH. Deploy fail2ban. Use key-based authentication where possible."
+    },
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 69 Traffic \u2014 192.168.1.20 \u2192 192.168.1.1",
+      "description": "Traffic on port 69 (TFTP \u2013 no auth) detected between 192.168.1.20 and 192.168.1.1.",
+      "risk_score": 6.0,
+      "evidence": [
+        "Src: 192.168.1.20:54321",
+        "Dst: 192.168.1.1:69",
+        "Classification: TFTP \u2013 no auth"
+      ],
+      "recommendation": "Investigate port 69 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    },
+    {
+      "category": "Data Exfiltration",
+      "title": "High Outbound Volume \u2014 192.168.1.70",
+      "description": "192.168.1.70 sent 12.2 MB outbound, exceeding the 10 MB threshold.",
+      "risk_score": 5.12162,
+      "evidence": [
+        "Bytes sent: 12,162,000 (12.2 MB)",
+        "Unique destinations: 1"
+      ],
+      "recommendation": "Implement DLP controls. Review outbound firewall rules. Correlate with user activity logs."
+    },
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 21 Traffic \u2014 192.168.1.20 \u2192 192.168.1.1",
+      "description": "Traffic on port 21 (FTP \u2013 cleartext auth) detected between 192.168.1.20 and 192.168.1.1.",
+      "risk_score": 5.0,
+      "evidence": [
+        "Src: 192.168.1.20:54321",
+        "Dst: 192.168.1.1:21",
+        "Classification: FTP \u2013 cleartext auth"
+      ],
+      "recommendation": "Investigate port 21 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    },
+    {
+      "category": "Malicious Activity",
+      "title": "Suspicious Port 21 Traffic \u2014 192.168.1.30 \u2192 192.168.1.2",
+      "description": "Traffic on port 21 (FTP \u2013 cleartext auth) detected between 192.168.1.30 and 192.168.1.2.",
+      "risk_score": 5.0,
+      "evidence": [
+        "Src: 192.168.1.30:55001",
+        "Dst: 192.168.1.2:21",
+        "Classification: FTP \u2013 cleartext auth"
+      ],
+      "recommendation": "Investigate port 21 traffic immediately. Isolate hosts and perform forensic analysis. Block at firewall if not legitimate."
+    }
+  ]
+}
